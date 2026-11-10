@@ -32,7 +32,7 @@
   <div class="phead-txt wrap"><h1>Television</h1></div>
 </section>
 <section class="epi wrap reveal"><blockquote>«Television is actually closer to reality than anything in books. The madness of TV is the madness of human life»<cite>Camille Paglia</cite></blockquote></section>
-<article class="prose wrap"><h2 class="sub">Notable TV appearances</h2><p>I have starred in some very popular Greek series.</p><ul class="credits"><li><b>“San adelfes”</b> (“Like sisters”)<span>director N. Koutelidakis</span></li><li><b>“I agapi irthe apo makria”</b> (“Love came from afar”)<span>director M. Manousakis</span></li><li><b>“Me thea sto pelago”</b> (“View to the sea”)<span>director Y. Vasiliades</span></li><li><b>“Kryfa monopatia”</b> (“Secret paths”)<span>director M. Manousakis</span></li><li><b>“Yungermann”</b> (by the title book of M. Karagatsis)<span>director G. Karantinakis</span></li></ul><p>More info at my <a href="https://www.imdb.com/name/nm1007350/" target="_blank" rel="noopener">IMDb page</a>.</p></article>
+<article class="prose wrap"><h2 class="sub">TV work</h2><ul class="credits"><li><b>“So Long, Marianne”</b><span>2024 · as Nick Katsikas · 7 episodes · NRK (Norway)</span></li><li><b>“Storgi”</b> (“Affection”)<span>2023 · as Giorgis · 3 episodes · SKAI</span></li><li><b>“Yungermann”</b> (after the novel by M. Karagatsis)<span>2007–2008 · as Mihalis Karamanos · 9 episodes · director G. Karantinakis · ANT1</span></li><li><b>“Epta thanasimes petheres”</b> (“Seven Deadly Mothers-in-law”)<span>2007 · as Antonis · 3 episodes · director G. Petriniotis · MEGA</span></li><li><b>“Oi istories tou astynomou Beka”</b> (“Inspector Bekas’ Stories”)<span>2006 · as Faidon Kapsis · 2 episodes · director N. Kritikos · ALPHA</span></li><li><b>“Deixe mou to filo sou”</b> (“Show Me Your Friend”)<span>2005–2006 · as Giorgos · 20 episodes · director A. Stamatiadis · ANT1</span></li><li><b>“Kryfa monopatia”</b> (“Secret Paths”)<span>2005–2006 · director M. Manousakis · ANT1</span></li><li><b>“Gia panta mazi”</b> (“Together Forever”)<span>2005 · TV movie</span></li><li><b>“Me thea sto pelago”</b> (“View to the Sea”)<span>2004 · as Stratos Politis · 21 episodes · director Y. Vasiliadis · MEGA</span></li><li><b>“Amarties goneon”</b> (“Sins of the Parents”)<span>2003–2004 · as Andreas · 29 episodes · director S. Smyriliou · MEGA</span></li><li><b>“I agapi irthe apo makria”</b> (“Love Came from Afar”)<span>2002 · as Spyros Vrahnos · director M. Manousakis · ANT1</span></li><li><b>“Lifting”</b><span>2001–2002 · as Miltos · 36 episodes · director G. Petriniotis · ANT1</span></li><li><b>“Athoos i enohos”</b> (“Innocent or Guilty”)<span>2000–2001 · as Thomas · 11 episodes · director G. Karantinakis · ANT1</span></li><li><b>“Constantine’s and Helen’s”</b><span>2000 · as Dr. Stelios Markidis · 1 episode · director K. Lychnaras</span></li><li><b>“San adelfes”</b> (“Like Sisters”)<span>1999 · director N. Koutelidakis · ERT</span></li></ul><p>More info at my <a href="https://www.imdb.com/name/nm1007350/" target="_blank" rel="noopener">IMDb page</a>.</p></article>
 </main>
 <footer class="foot">
   <div class="foot-grid">
@@ -48,6 +48,25 @@ const b=document.querySelector('.burger'),n=document.getElementById('nav');
 b.addEventListener('click',()=>{const o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',!o);document.body.classList.toggle('nav-open',!o);});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+const st=document.querySelector('.strip');
+if(st){
+ const step=()=>Math.max(st.clientWidth*0.8,280);
+ document.querySelector('.slider .prev').onclick=()=>st.scrollBy({left:-step(),behavior:'smooth'});
+ document.querySelector('.slider .next').onclick=()=>st.scrollBy({left:step(),behavior:'smooth'});
+ const upd=()=>{document.querySelector('.slider .prev').disabled=st.scrollLeft<5;document.querySelector('.slider .next').disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-5;};
+ st.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);st.querySelectorAll('img').forEach(i=>i.addEventListener('load',upd));window.addEventListener('load',upd);upd();
+ const shots=[...st.querySelectorAll('.shot')],lb=document.querySelector('.lb'),li=lb.querySelector('img'),lc=lb.querySelector('.lb-c');let cur=0,x0=null;
+ const show=i=>{cur=(i+shots.length)%shots.length;li.src=shots[cur].dataset.full;lc.textContent=(cur+1)+' / '+shots.length;};
+ const open=i=>{show(i);lb.hidden=false;document.body.style.overflow='hidden';lb.querySelector('.lb-x').focus();};
+ const close=()=>{lb.hidden=true;document.body.style.overflow='';shots[cur].focus();};
+ shots.forEach((b,i)=>b.onclick=()=>open(i));
+ lb.querySelector('.lb-x').onclick=close;lb.querySelector('.lb-p').onclick=e=>{e.stopPropagation();show(cur-1)};lb.querySelector('.lb-n').onclick=e=>{e.stopPropagation();show(cur+1)};
+ lb.onclick=e=>{if(e.target===lb)close();};
+ document.addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);});
+ lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+ lb.addEventListener('touchend',e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)show(cur+(d<0?1:-1));x0=null;});
+}
 </script>
 </body>
 </html>

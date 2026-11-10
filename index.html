@@ -51,7 +51,18 @@
 </section>
 <section class="moments">
   <div class="wrap"><p class="eyebrow">Στιγμές</p></div>
-  <div class="strip"><figure class="reveal"><img src="/img/g2.jpg" alt="" loading="lazy"></figure><figure class="reveal"><img src="/img/g3.jpg" alt="" loading="lazy"></figure><figure class="reveal"><img src="/img/g6.jpg" alt="" loading="lazy"></figure><figure class="reveal"><img src="/img/g5.jpg" alt="" loading="lazy"></figure><figure class="reveal"><img src="/img/g7.jpg" alt="" loading="lazy"></figure><figure class="reveal"><img src="/img/g8.jpg" alt="" loading="lazy"></figure></div>
+  <div class="slider">
+    <button class="nav prev" aria-label="Προηγούμενη">&#8592;</button>
+    <div class="strip" tabindex="0"><button class="shot" data-i="0" data-full="/img/m/01.jpg" aria-label="Στιγμές 1"><img src="/img/m/t01.jpg" alt="" loading="lazy"></button><button class="shot" data-i="1" data-full="/img/m/02.jpg" aria-label="Στιγμές 2"><img src="/img/m/t02.jpg" alt="" loading="lazy"></button><button class="shot" data-i="2" data-full="/img/m/03.jpg" aria-label="Στιγμές 3"><img src="/img/m/t03.jpg" alt="" loading="lazy"></button><button class="shot" data-i="3" data-full="/img/m/04.jpg" aria-label="Στιγμές 4"><img src="/img/m/t04.jpg" alt="" loading="lazy"></button><button class="shot" data-i="4" data-full="/img/m/05.jpg" aria-label="Στιγμές 5"><img src="/img/m/t05.jpg" alt="" loading="lazy"></button><button class="shot" data-i="5" data-full="/img/m/06.jpg" aria-label="Στιγμές 6"><img src="/img/m/t06.jpg" alt="" loading="lazy"></button><button class="shot" data-i="6" data-full="/img/m/07.jpg" aria-label="Στιγμές 7"><img src="/img/m/t07.jpg" alt="" loading="lazy"></button><button class="shot" data-i="7" data-full="/img/m/08.jpg" aria-label="Στιγμές 8"><img src="/img/m/t08.jpg" alt="" loading="lazy"></button><button class="shot" data-i="8" data-full="/img/m/09.jpg" aria-label="Στιγμές 9"><img src="/img/m/t09.jpg" alt="" loading="lazy"></button><button class="shot" data-i="9" data-full="/img/m/10.jpg" aria-label="Στιγμές 10"><img src="/img/m/t10.jpg" alt="" loading="lazy"></button><button class="shot" data-i="10" data-full="/img/m/11.jpg" aria-label="Στιγμές 11"><img src="/img/m/t11.jpg" alt="" loading="lazy"></button><button class="shot" data-i="11" data-full="/img/m/12.jpg" aria-label="Στιγμές 12"><img src="/img/m/t12.jpg" alt="" loading="lazy"></button><button class="shot" data-i="12" data-full="/img/m/13.jpg" aria-label="Στιγμές 13"><img src="/img/m/t13.jpg" alt="" loading="lazy"></button><button class="shot" data-i="13" data-full="/img/m/14.jpg" aria-label="Στιγμές 14"><img src="/img/m/t14.jpg" alt="" loading="lazy"></button><button class="shot" data-i="14" data-full="/img/m/15.jpg" aria-label="Στιγμές 15"><img src="/img/m/t15.jpg" alt="" loading="lazy"></button><button class="shot" data-i="15" data-full="/img/m/16.jpg" aria-label="Στιγμές 16"><img src="/img/m/t16.jpg" alt="" loading="lazy"></button><button class="shot" data-i="16" data-full="/img/m/17.jpg" aria-label="Στιγμές 17"><img src="/img/m/t17.jpg" alt="" loading="lazy"></button><button class="shot" data-i="17" data-full="/img/m/18.jpg" aria-label="Στιγμές 18"><img src="/img/m/t18.jpg" alt="" loading="lazy"></button></div>
+    <button class="nav next" aria-label="Επόμενη">&#8594;</button>
+  </div>
+  <div class="lb" role="dialog" aria-modal="true" hidden>
+    <button class="lb-x" aria-label="Κλείσιμο">&times;</button>
+    <button class="lb-p" aria-label="Προηγούμενη">&#8592;</button>
+    <img alt="">
+    <button class="lb-n" aria-label="Επόμενη">&#8594;</button>
+    <span class="lb-c"></span>
+  </div>
   <div class="wrap"><a class="more" href="https://www.instagram.com/diamond_karanastasis/" target="_blank" rel="noopener">→ Instagram @diamond_karanastasis</a></div>
 </section>
 </main>
@@ -69,6 +80,25 @@ const b=document.querySelector('.burger'),n=document.getElementById('nav');
 b.addEventListener('click',()=>{const o=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',!o);document.body.classList.toggle('nav-open',!o);});
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+const st=document.querySelector('.strip');
+if(st){
+ const step=()=>Math.max(st.clientWidth*0.8,280);
+ document.querySelector('.slider .prev').onclick=()=>st.scrollBy({left:-step(),behavior:'smooth'});
+ document.querySelector('.slider .next').onclick=()=>st.scrollBy({left:step(),behavior:'smooth'});
+ const upd=()=>{document.querySelector('.slider .prev').disabled=st.scrollLeft<5;document.querySelector('.slider .next').disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-5;};
+ st.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);st.querySelectorAll('img').forEach(i=>i.addEventListener('load',upd));window.addEventListener('load',upd);upd();
+ const shots=[...st.querySelectorAll('.shot')],lb=document.querySelector('.lb'),li=lb.querySelector('img'),lc=lb.querySelector('.lb-c');let cur=0,x0=null;
+ const show=i=>{cur=(i+shots.length)%shots.length;li.src=shots[cur].dataset.full;lc.textContent=(cur+1)+' / '+shots.length;};
+ const open=i=>{show(i);lb.hidden=false;document.body.style.overflow='hidden';lb.querySelector('.lb-x').focus();};
+ const close=()=>{lb.hidden=true;document.body.style.overflow='';shots[cur].focus();};
+ shots.forEach((b,i)=>b.onclick=()=>open(i));
+ lb.querySelector('.lb-x').onclick=close;lb.querySelector('.lb-p').onclick=e=>{e.stopPropagation();show(cur-1)};lb.querySelector('.lb-n').onclick=e=>{e.stopPropagation();show(cur+1)};
+ lb.onclick=e=>{if(e.target===lb)close();};
+ document.addEventListener('keydown',e=>{if(lb.hidden)return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);});
+ lb.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+ lb.addEventListener('touchend',e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)show(cur+(d<0?1:-1));x0=null;});
+}
 </script>
 </body>
 </html>
