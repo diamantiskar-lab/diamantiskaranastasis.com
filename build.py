@@ -198,7 +198,9 @@ GALLERY_THEATRE = {
  "el": [("p-trelo-aima", "Το Τρελό Αίμα"), ("p-love", "Love, Love, Love"), ("p-anarchia", "Ιστορία Έρωτα και Αναρχίας"), ("p-fovos", "Φόβος")],
  "en": [("p-trelo-aima", "Crazy Blood"), ("p-love", "Love Love Love"), ("p-anarchia", "Love and Anarchy"), ("p-fovos", "Fear")],
 }
-MOMENTS = [f"{i:02d}" for i in range(1, 19)]
+MOMENTS = ["01","02","03","04","05","06","07","08","09","10","11","13","12","14","16"]
+from PIL import Image as _Im
+MSIZE = {g: _Im.open(os.path.join(OUT, "img", "m", f"t{g}.jpg")).size for g in MOMENTS}
 
 CONTACT = {
  "el": dict(title="Επικοινωνία", img="contact", h="Αφήστε το μήνυμά σας"),
@@ -264,12 +266,13 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{{if(e.isIntersecting){{e.ta
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 const st=document.querySelector('.strip');
+let touched=false;
 if(st){{
  const step=()=>Math.max(st.clientWidth*0.8,280);
- document.querySelector('.slider .prev').onclick=()=>st.scrollBy({{left:-step(),behavior:'smooth'}});
- document.querySelector('.slider .next').onclick=()=>st.scrollBy({{left:step(),behavior:'smooth'}});
+ document.querySelector('.slider .prev').onclick=()=>{{touched=true;st.scrollBy({{left:-step(),behavior:'smooth'}});}};
+ document.querySelector('.slider .next').onclick=()=>{{touched=true;st.scrollBy({{left:step(),behavior:'smooth'}});}};
  const upd=()=>{{document.querySelector('.slider .prev').disabled=st.scrollLeft<5;document.querySelector('.slider .next').disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-5;}};
- st.addEventListener('scroll',upd,{{passive:true}});window.addEventListener('resize',upd);st.querySelectorAll('img').forEach(i=>i.addEventListener('load',upd));window.addEventListener('load',upd);upd();
+ st.addEventListener('scroll',upd,{{passive:true}});window.addEventListener('resize',upd);['pointerdown','wheel','touchstart','keydown'].forEach(ev=>st.addEventListener(ev,()=>touched=true,{{passive:true}}));st.querySelectorAll('img').forEach(i=>i.addEventListener('load',()=>{{if(!touched)st.scrollLeft=0;upd();}}));window.addEventListener('load',()=>{{st.scrollLeft=0;upd();}});st.scrollLeft=0;upd();
  const shots=[...st.querySelectorAll('.shot')],lb=document.querySelector('.lb'),li=lb.querySelector('img'),lc=lb.querySelector('.lb-c');let cur=0,x0=null;
  const show=i=>{{cur=(i+shots.length)%shots.length;li.src=shots[cur].dataset.full;lc.textContent=(cur+1)+' / '+shots.length;}};
  const open=i=>{{show(i);lb.hidden=false;document.body.style.overflow='hidden';lb.querySelector('.lb-x').focus();}};
@@ -293,7 +296,7 @@ def home(lang):
         href = "https://dacos.gr" if k == "voice" else "/" + t["paths"][k]
         note = f'<small>{E(t["voice_note"])}</small>' if k == "voice" else ""
         tiles += f'<a class="tile reveal" href="{href}"><img src="/img/{img}.jpg" alt="" loading="lazy"><span class="n">0{i+1}</span><span class="l">{E(lbl)}{note}</span></a>'
-    moments = "".join(f'<button class="shot" data-i="{n}" data-full="/img/m/{g}.jpg" aria-label="{E(t["photos_h"])} {n+1}"><img src="/img/m/t{g}.jpg" alt="" loading="lazy"></button>' for n, g in enumerate(MOMENTS))
+    moments = "".join(f'<button class="shot" data-i="{n}" data-full="/img/m/{g}.jpg" aria-label="{E(t["photos_h"])} {n+1}"><img src="/img/m/t{g}.jpg" width="{MSIZE[g][0]}" height="{MSIZE[g][1]}" alt="" loading="lazy"></button>' for n, g in enumerate(MOMENTS))
     return f"""
 <section class="hero">
   <img class="hero-img" src="/img/hero.jpg" alt="{E(t['name_first'])} {E(t['name_last'])}" fetchpriority="high">

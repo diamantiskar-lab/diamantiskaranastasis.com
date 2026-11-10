@@ -83,7 +83,7 @@ blockquote cite{display:block;margin-top:20px;font-style:normal;font-size:13px;l
 .moments .eyebrow{color:#9aa1a8}
 .moments .more{color:var(--paper)}
 .slider{position:relative}
-.strip{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--pad);padding:0 var(--pad) 18px;scrollbar-width:thin;scrollbar-color:#3a3f44 transparent}
+.strip{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding:0 var(--pad);padding:0 var(--pad) 18px;scrollbar-width:thin;scrollbar-color:#3a3f44 transparent}
 .shot{flex:none;height:clamp(180px,26vh,240px);padding:0;border:0;background:none;cursor:zoom-in;scroll-snap-align:start;overflow:hidden}
 .shot img{height:100%;width:auto;max-width:none;display:block;filter:grayscale(1);transition:filter .5s,transform .6s}
 .shot:hover img,.shot:focus-visible img{filter:none;transform:scale(1.02)}
