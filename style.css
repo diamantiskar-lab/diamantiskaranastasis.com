@@ -161,3 +161,13 @@ blockquote cite{display:block;margin-top:20px;font-style:normal;font-size:13px;l
   .reveal,.hero h1 span,.hero h1 b,.roles{opacity:1;transform:none}
 }
 .credits{margin-bottom:40px}
+
+.reel{padding-top:clamp(48px,8vw,96px)}
+.player{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden;margin-top:18px}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player .poster{position:absolute;inset:0;display:block;cursor:pointer}
+.player .poster img{width:100%;height:100%;object-fit:cover;opacity:.8;transition:opacity .3s}
+.player .poster:hover img{opacity:.95}
+.player .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:84px;height:84px;border-radius:50%;background:#E0262B;display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.player .play::after{content:"";margin-left:6px;border-left:24px solid #fff;border-top:15px solid transparent;border-bottom:15px solid transparent}
+@media (max-width:600px){.player .play{width:64px;height:64px}.player .play::after{border-left-width:18px;border-top-width:11px;border-bottom-width:11px}}
